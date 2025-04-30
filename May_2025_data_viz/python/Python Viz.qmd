@@ -1,0 +1,23 @@
+---
+title: "Python Visualization"
+subtitle: "Just a few cool things Python can do"
+format:
+  lumo-html: 
+    logo: "logo.png"           # Optional. Path to a logo displayed above the title
+    github-repo: "https://github.com/A-G-Data-Science-CoP"  # Optional. Adds a github corner at the top right
+    primary-color: "#22418a"
+    self-contained: true
+    bg-image: "background.jpg"  # Optional: link to an image for the header background
+author: Chaerim Lee | A-G Associates Data Science Community of Practice
+date: last-modified
+keywords: ["data science", "analytics"]
+---
+
+```{python}
+import pandas as pd 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+
+```
