@@ -1,0 +1,46 @@
+---
+title: "Title: insert title here"
+subtitle: "And subtitle here, a longer description of what you've done or your findings"
+format:
+  lumo-html: 
+    logo: "logo.png"           # Optional. Path to a logo displayed above the title
+    github-repo: ""  # Optional. Adds a github corner at the top right
+    primary-color: "#22418a"
+    self-contained: true
+    bg-image: "background.jpg"  # Optional: link to an image for the header background
+author: A-G Associates Data Science Community of Practice
+date: last-modified
+---
+
+## Using Quarto
+
+Quarto is a versatile tool for creating documents in various formats (HTML, PDF, Word, etc.) from a single source file. When using Quarto with RStudio, you can:
+
+1. Create Quarto documents: Use the RStudio IDE to create .qmd files.
+
+2. Render and preview: Render documents with a single click and preview them side-by-side in HTML or PDF formats.
+
+3. Authoring: Utilize RStudio's visual editor for a WYSIWYM experience, or switch to source mode for direct code editing. Toggle between with the "Source" and "Visual" buttons at the top of the screen.
+
+4. Compatibility: Quarto supports existing R Markdown documents with minimal changes.
+
+## Coding in Quarto
+
+To expand and view the code chunk, click below. 
+
+```{r}
+# This is a code chuck - add R code here.
+# To add a new code chunk throughout your Quarto document, use CTRL + ALT + I.
+
+today <- Sys.Date()
+```
+
+You can also add in-line code, such as: Today is `r today`! This allows you to reference R objects in your environment and thus add automatically updating content througout the text as well. I.e., when you run with updated data, if you've already set up your document with in-line code where appropriate, you won't have to go back and edit as much manually. 
+
+## Output from Quarto
+
+This quarto template, when rendered, will output an HTML file. You can include headers, formatted text including paragraphs, bullets, numbered lists, etc., interactive data visualization, tabs, and more! It's a great way to share or report out on data science projects in a more streamlined way. 
+
+Add in some code or text and click render to see the output!
+
+To change the background photo at the top, replace the photo named "background.jpg" in the folder. The template will automatically make it somewhat transparent to not overwhelm the output. 

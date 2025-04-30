@@ -1,0 +1,82 @@
+---
+title: "Insert title here"
+subtitle: "And subtitle here, a longer description of what you've done or your findings"
+format:
+  lumo-html: 
+    logo: "logo.png"           # Optional. Path to a logo displayed above the title
+    github-repo: "https://github.com/A-G-Data-Science-CoP"  # Optional. Adds a github corner at the top right
+    primary-color: "#22418a"
+    self-contained: true
+    bg-image: "background.jpg"  # Optional: link to an image for the header background
+author: A-G Associates Data Science Community of Practice
+date: last-modified
+keywords: ["data science", "analytics"]
+---
+
+## Executive Summary
+
+### Brief overview of the analysis
+
+### Key findings
+
+### Recommendations
+
+## Introduction
+
+### Background and context
+
+### Objectives of the analysis
+
+### Scope and limitations
+
+## Methodology
+
+### Data sources
+
+### Data collection methods
+
+### Analytical techniques used
+
+## Data Description
+
+### Description of datasets
+
+### Data cleaning and preprocessing steps
+
+### Summary statistics
+
+## Analysis and Results
+
+### Detailed analysis
+
+### Visualizations (charts, graphs, tables)
+
+### Interpretation of results
+
+## Discussion
+
+### Insights and implications
+
+### Comparison with previous studies or benchmarks
+
+### Limitations of the analysis
+
+## Conclusion
+
+### Summary of key findings
+
+### Final recommendations
+
+### Future work or next steps
+
+## References
+
+### Citations of all sources used
+
+### Any relevant literature or previous reports
+
+## Appendices
+
+### Additional tables, figures, or supplementary material
+
+### Code snippets or algorithms used

@@ -1,0 +1,482 @@
+---
+title: "Federal Employee Viewpoint Survey (FEVS) Analysis of Latent Variables"
+subtitle: "Understanding Perceived Organizational Support, Employee Satisfaction, and Turnover Intention"
+format:
+  lumo-html: 
+    logo: "logo.png"           # Optional. Path to a logo displayed above the title
+    github-repo: ""  # Optional. Adds a github corner at the top right
+    primary-color: "#22418a"
+    self-contained: true
+    bg-image: "background.jpg"  # Optional: link to an image for the header background
+author: Lyndsey Tuft, A-G Associates Data Science Community of Practice
+date: last-modified
+---
+
+## Introduction to FEVS
+
+#### What is FEVS?
+
+The Federal Employee Viewpoint Survey (FEVS) is a comprehensive annual survey administered by the U.S. Office of Personnel Management (OPM) to measure federal employees' perceptions of their workplace experiences, leadership, and organizational culture.
+
+#### Data Structure and Collection
+
+-   Sample size: Over 600,000 federal employees across agencies
+
+-   Survey structure: Multiple question categories covering workplace satisfaction, leadership, work-life balance, etc.
+
+-   Administration: Annual web-based survey with voluntary participation
+
+-   Response format: Most items use 5-point Likert scales (Strongly Disagree to Strongly Agree)
+
+-   Demographic data: Includes age groups (collapsed into binary under 40/40+ categories), tenure, supervisory status, and other workforce characteristics (e.g., sex, military status, disability, ethnicity)
+
+#### Value and Applications
+
+-   Provides insights into federal workforce engagement and satisfaction
+
+-   Enables agency comparisons and benchmarking
+
+-   Informs strategic human capital planning and organizational development
+
+-   Identifies areas for potential intervention and improvement
+
+## Overview of this Study
+
+The federal government faces significant challenges retaining employees, particularly those under 40, which is both disruptive and costly to organizational effectiveness. As the federal workforce contracts, retaining high-performing younger employees becomes increasingly critical.
+
+While Organizational Support Theory (OST) suggests that employees who feel supported by their organization develop stronger emotional bonds and are less likely to leave, the relationship between Perceived Organizational Support (POS), Employee Satisfaction (ES), and Turnover Intention (TI) remains underexplored in the public sector context—especially among younger federal employees.
+
+This study aims to:
+
+- Extend OST to the federal workforce by examining how POS influences ES and TI among employees under 40
+- Address methodological limitations of previous FEVS studies by applying Structural Equation Modeling (SEM) to account for measurement error and complex relationships between latent variables
+- Provide insights to help federal agencies develop targeted retention strategies
+
+#### Theoretical Framework
+**Organizational Support Theory (OST)** provides the theoretical foundation for this study. OST proposes that:
+
+- Employees form global beliefs about the extent to which their organization values their contributions and cares about their well-being
+- These perceptions of organizational support create a sense of obligation to help the organization achieve its objectives
+- This support-obligation relationship is strengthened through the norm of reciprocity, where employees feel compelled to reciprocate favorable treatment
+- Higher POS is associated with higher job satisfaction and organizational commitment, and lower turnover intention
+
+The application of OST in the federal context is particularly relevant as public sector organizations navigate unique challenges including budget constraints, changing political landscapes, and competition with private sector employers.
+
+#### Key Variables
+This study examines three key variables:
+
+- **Perceived Organizational Support (POS)** refers to employees' beliefs about the extent to which their organization values their contributions and cares about their well-being. It encompasses perceptions of fair treatment, supervisor support, organizational rewards, favorable job conditions, and support for employee development.
+
+- **Employee Satisfaction (ES)** represents an employee's overall affective evaluation of their job experience. It reflects the degree to which employees feel positively about their work environment, including aspects like job content, relationships with colleagues, and opportunities for growth.
+
+- **Turnover Intention (TI)** is defined as an employee's conscious and deliberate willingness to leave the organization within a specific period of time. This includes both thinking about quitting and actively planning to leave, whether for another federal position, a non-federal job, or other reasons.
+
+#### Hypotheses
+This study tests four primary hypotheses developed by building upon theoretical foundations and empirical evidence from prior research on perceived organizational support (POS), employee satisfaction (ES), and turnover intentions (TI). These hypotheses specifically examine the relationships between these constructs among federal employees under 40 years old, a critical demographic for workforce retention efforts.
+
+1. **H1**: ***POS positively relates to ES among federal employees under 40.*** This hypothesis emerges directly from the tenets of OST (Eisenberger et al., 1986) and has been supported by numerous studies. According to OST, when employees perceive their organization values their contributions and cares about their well-being, they develop positive affective responses toward the organization (Eisenberger et al., 2020; Hngoi et al., 2023). These positive perceptions fulfill critical socio-emotional needs and enhance overall job satisfaction.
+
+   Recent studies continue to demonstrate significant positive relationships between POS and overall job satisfaction (Kurt & Duyar, 2023; Pattnaik et al., 2020). The theoretical underpinning suggests that POS creates a reciprocal socio-emotional bond where employees who feel supported develop stronger emotional connections to their work and organization, leading to higher satisfaction levels. For federal employees under 40, who are still developing their career trajectories, this relationship may be particularly important as they evaluate their long-term fit within government service.
+   
+2. **H2**: ***ES negatively relates to TI among federal employees under 40.*** This hypothesis is grounded in both the OST framework and traditional models of employee turnover (Mobley, 1977; Price, 1977). Satisfaction has consistently been identified as a key predictor of employee retention across numerous studies and meta-analyses (Heimerl et al., 2020; Hur & Abner, 2023; Pu et al., 2024).
+
+   The relationship between satisfaction and turnover intentions represents a cognitive-evaluative process where employees assess their current employment situation against alternatives. When satisfaction is high, employees are less likely to seek alternative employment opportunities. For federal employees under 40, this relationship is particularly relevant as they are more likely than older cohorts to leave for reasons other than retirement (Partnership for Public Service, n.d.).
+   
+3. **H3**: ***ES mediates the relationship between POS and TI among federal employees under 40.*** This mediation hypothesis represents an integration of the previous two hypotheses and provides a more nuanced understanding of *how* POS ultimately influences retention. While POS may have a direct effect on turnover intentions, theory suggests that this relationship operates at least partially through employee satisfaction as a key psychological mechanism.
+
+   The theoretical basis for this mediation comes from both OST and the Job Demands-Resources (JD-R) model. POS represents a critical job resource that helps employees manage workplace demands (Bakker et al., 2003; Demerouti et al., 2001). These resources first impact employees' attitudes (satisfaction) before influencing behavioral intentions (turnover). Prior research has demonstrated that satisfaction often serves as a mediating mechanism between workplace perceptions and turnover intentions (Pu et al., 2024).
+
+4. **H4**: ***The strength of the relationship between POS and ES will be stronger among federal employees under 40 compared to those over 40 in the federal workforce.*** This hypothesis addresses the important question of whether age moderates the relationship between POS and ES. The comparative nature of this hypothesis recognizes potential generational differences in what employees value and how they respond to organizational support. 
+
+   Younger federal employees (under 40) may place greater emphasis on feeling supported and having their contributions valued, particularly as they are still establishing their careers. The earlier career stage of these employees suggests they may be more receptive to organizational support as they develop professional identities and determine their long-term career paths. Additionally, younger workers often have different expectations about the employer-employee relationship compared to older generations (Charoensap-Kelly et al., 2023).
+
+   This hypothesis specifically examines whether the established POS-ES relationship varies in strength between age groups, providing important insights for tailoring retention strategies to different segments of the federal workforce.
+
+By focusing on the critical demographic of employees under 40 — whose expectations and needs for organizational support may differ from older colleagues — this study makes a significant contribution to understanding retention dynamics in the public sector while demonstrating more rigorous analytical approaches for using FEVS data to test organizational behavior theories.
+
+## Methodological Approaches 
+![](C:/Users/LyndseyTuft/A-G%20Associates/Data%20Analytics%20Resources%20-%20R/Data%20Science%20Best%20Practices/April%202025%20-%20GitHub%20and%20Quarto/Drafting%20A-G%20Quarto%20Template/FEVS_Approach.png){width="70%" fig-align="center"}
+
+## Methodological Approach
+
+The approach proceeded in two phases. *First*, a measurement phase established valid and reliable indicators for each latent construct through confirmatory factor analysis (CFA). This critical step ensured construct validity before proceeding to hypothesis testing. *Second*, a structural phase tested the hypothesized relationships, including direct effects between variables and the potential mediating role of employee satisfaction in the relationship between organizational support and turnover intentions.
+
+This approach aligns with recommendations by methodological scholars (Kline, 2023; Resh et al., 2021; Somers, 2018) who emphasize the importance of establishing measurement models before testing structural relationships, particularly when working with secondary data like the FEVS. The use of structural equation modeling (SEM) offers advantages over traditional regression techniques by accounting for measurement error and allowing for the simultaneous testing of multiple relationships (more info below).
+
+**Note** that a key methodological challenge when using secondary data is the appropriate selection of items to measure theoretical constructs not originally designed into the instrument. Here is the process used to select FEVS items as indicators of the latent constructs under investigation in this investigation.
+
+- ***Theoretical Alignment & Prior Research Application *** Each potential FEVS item was first evaluated for its theoretical alignment with the constructs as defined and operationalized in extant literature. Items were also evaluated for their measurement role distinction to avoid potential construct contamination. For example, Q67 showed strong theoretical alignment with ES rather than POS, despite potentially measuring recognition which could be conceptualized as a form of organizational support. (Statistical analysis in the next step confirmed this item loaded more strongly on the ES factor.)
+
+- ***Model Fit Considerations*** Following initial theoretical selection, CFA was conducted to refine the measurement models by evaluating the following items. The final measurement model demonstrated good fit indices (CFI > .90, TLI > .90, RMSEA < .08, SRMR < .05), supporting the validity of the selected items as indicators of POS and ES.
+
+   1. Factor loadings for each item on its respective construct
+   2. Modification indices suggesting potential improvements
+   3. Discriminant validity between POS and ES constructs
+   4. Overall model fit statistics (CFI, TLI, RMSEA, SRMR)
+
+This rigorous item selection process strengthens the construct validity of the study and builds upon recommendations by Resh et al. (2021) and Somers (2018) for improving measurement approaches with FEVS data. The final measurement models provide theoretically grounded and empirically validated operationalizations of POS and ES specifically tailored to the federal workforce context.
+
+#### Confirmatory Factor Analysis (CFA) 
+
+Confirmatory Factor Analysis is a statistical technique used to verify the factor structure of a set of observed variables, confirming relationships between observed variables and their underlying latent constructs. Click [here](https://www.statisticssolutions.com/free-resources/directory-of-statistical-analyses/confirmatory-factor-analysis/ "information on CFA") to learn more about CFA.
+
+-   **Purpose**: Evaluates measurement models for latent constructs
+
+-   **Advantages**: Tests theoretical factor structures, assesses measurement quality
+
+-   **Key assumptions**: Multivariate normality, proper specification
+
+-   **Application in FEVS**: Validates measurement models for POS and ES
+
+#### Multiple Imputation 
+
+Multiple Imputation is a statistical technique for handling missing data that creates several complete datasets with plausible values, analyzes each separately, and then combines the results. Click [here](https://databasecamp.de/en/data/data-imputation "information about imputations") to learn more about imputations.
+
+-   **Purpose**: Handles missing data comprehensively
+
+-   **Advantages**: Reduces bias, maintains sample size, accounts for uncertainty
+
+-   **Key assumptions**: Missing at Random (MAR)
+
+-   **Application in FEVS**: Addresses inevitable survey non-response
+
+#### Structural Equation Modeling (SEM) 
+
+Structural Equation Modeling is a multivariate statistical framework that tests complex relationships between observed and unobserved (latent) variables, combining aspects of factor analysis and multiple regression. Click [here](https://www.theanalysisfactor.com/four-types-sem/ "more information about SEM") to learn more about SEM.
+
+![Conceptual Structured Model to Test Hypotheses](C:/Users/LyndseyTuft/A-G Associates/Data Analytics Resources - R/Data Science Best Practices/April 2025 - GitHub and Quarto/Drafting A-G Quarto Template/FEVS SEM Model overview.png){width="70%" fig-align="center"}
+
+-   **Purpose**: There are several different types of SEM (e.g., path analysis, latent variable, factor analysis), but I used latent variable structural modeling in this exploration. It tests relationships between latent constructs (i.e., variables that cannot be directly observed or measured but are inferred from observed variables such as responses to survey questions) when simpler techniques like correlation and regression are inefficient.
+
+-   **Advantages**: Accounts for measurement error, tests direct and indirect effects
+
+-   **Key assumptions**: Multivariate normality, adequate sample size (great for large samples), proper specification
+
+-   **Application in FEVS**: Model relationships between workplace perceptions and outcomes
+
+-   **NOTE**: As an extended look, to examine turnover intention as a multicategorical variable instead of binary yes/no outcome, I used a multinomial two-step approach to maintain the benefits of latent measurement while properly modeling the multinomial outcome.
+
+    -   Extract factor scores from the measurement model
+
+    -   Use the factor scores in multinomial logistic regression within the SEM
+
+## R Packages Utilized
+
+Five R packages were used in this analysis, including `lavaan`, `semPlot`, `semTools`, `mice`, and `nnet`.
+
+#### Latent Variable Analysis
+
+The [`lavaan`](https://cran.r-project.org/web/packages/lavaan/index.html) package is a popular R tool specialized for analyzing things we can't measure directly (e.g., how supported employees feel). It connects survey questions to these hidden concepts (i.e., latent variables) and allows us to test ideas about how they relate to each other.
+
+Used it:
+
+-   To create and test confirmatory factor analysis models (`cfa()`)
+    ```{r eval=FALSE}
+       # Define the model for CFA
+       cfa_modelAa <- '
+            POS =~ Q1 + Q2 + Q6 + Q9 + Q10 + Q12 + Q13 + Q25 + Q40
+            ES =~ Q46 + Q67 + Q69 + Q70 + Q71 + Q72 + Q86 
+            # correlated errors for most problematic pairs
+            Q9 ~~ Q10'
+    
+        # Run CFA on defined model
+        cfa_fitAa <- cfa(cfa_modelAa, 
+                        data = FEVS_2023_POS_ES_DEMOS_ONLY,
+                        missing = "fiml", # default, but specified for clarity
+                        estimator = "MLR") # robust max likelihood to best handle non-normality
+        
+        # Display summary of model fit
+        summary(cfa_fitAa, fit.measures = T, standardized = T)
+        
+        # Reliability calculation
+        rel<- compRelSEM(cfa_fitAa)
+        rel
+    ```
+-   To build structural equation models (`sem()`)
+    ```{r eval=FALSE}
+       # Define SEM model
+          sem_model <- '
+            POS =~ Q1 + Q2 + Q6 + Q9 + Q10 + Q12 + Q13 + Q25 + Q40
+            ES =~ Q46 + Q67 + Q69 + Q70 + Q71 + Q72 + Q86
+            Q9 ~~ Q10
+        
+            # structural model
+            ES ~ a*POS
+            DLEAVING_binary ~ c*POS + b*ES
+        
+            # Indirect effect
+            indirect := a*b
+            total := c + (a*b)
+            '
+          
+        # Run model for each group
+            under40_fit <- sem(
+              model = sem_model,
+              data = under40_data,
+              estimator = "WLSMV",
+              ordered = "DLEAVING_binary"
+            )
+            
+            over40_fit <- sem(
+              model = sem_model,
+              data = over40_data,
+              estimator = "WLSMV",
+              ordered = "DLEAVING_binary"
+            )
+    ```
+
+-   To extract parameter estimates (`parameterEstimates()`)
+    ```{r eval=FALSE}
+        # extract POS->ES path coefficients for each group
+          under40_coefs <- parameterEstimates(under40_fit)
+          over40_coefs <- parameterEstimates(over40_fit)   
+    ```
+
+-   To examine modification indices for model improvement (`modindices()`)
+    ```{r eval=FALSE}
+        # examine mod indices to see what pairs are contributing to misfit
+          modindices(cfa_fitA, sort = T, minimum.value = 50)   
+    ```
+-   To predict latent variable scores (`lavPredict()`)
+    ```{r eval=FALSE}
+        # extract factor scores
+          scores <- as.data.frame(lavaan::lavPredict(cfa_fit))  
+    ```
+
+#### Path Diagrams & Visual Analysis of Various SEM Packages' Output
+
+The [`semPlot`](https://cran.r-project.org/web/packages/semPlot/index.html "more information") package turns statistical models into visual diagrams. It can help create a clearer picture of how different workplace factors (e.g., organizational support and satisfaction) influence each other. Typically they use arrows to show relationships and make it easier to explain the connections found in the data to non-technical audiences.
+
+Used it:
+
+-   To visualize the CFA model using the `semPaths()` function, displaying standardized coefficients and model structure
+    ```{r eval=FALSE}
+        # CFA diagram
+          semPaths(cfa_fitAa,
+                 what = "std", #show std coeffs 
+                 layout = "tree", #hierarchical layout
+                 rotation = 2, #rotate the layout                 
+                 edge.label.cex = 0.7, #size of edge labels
+                 nCharNodes = 0, #full vars names
+                 sizeMan = 6, #size of manifest vars
+                 sizeLat = 10, #size latent vars
+                 node.width = 1.8,
+                 shapeMan = "rectangle", #spread out manifest vars
+                 edge.color = "black",
+                 edge.width = 0.5, #flatten all edges
+                 label.cex = 0.7, #node label font size
+                 fade = FALSE, #don't fade edges by coefficient
+                 residuals = TRUE, #show residuals
+                 intercepts = FALSE, #don't show
+                 thresholds = FALSE, #don't show
+                 manifests = c("Q1", "Q2", "Q6", "Q9", "Q10", "Q12", "Q13", "Q25", "Q40",
+                               "Q46", "Q67", "Q69", "Q70", "Q71", "Q72", "Q86"),
+                 latents = c("POS", "ES"),
+                 groups = "latents", #group by latent vars
+                 color = list(lat = c("lightgreen", "skyblue")), #POS = green ES = blue
+                 pastel = TRUE, #softer node colors
+                 mar = c(25, 6, 30, 5), #window size bot/left/top/right
+                 layoutScale = c(1, 3), #stretch scale between var nodes
+                 optimizeLatRes = TRUE, #prevent overlap of latent vars
+                 legend = FALSE) #don't need legend
+        
+          title("Confirmatory Factor Analysis Model", line = -2, cex.main = 1.8, font.main = 2, col.main = "darkblue")
+          
+      dev.off() 
+    ```
+![CFA Model Diagram](C:/Users/LyndseyTuft/A-G Associates/Data Analytics Resources - R/Data Science Best Practices/April 2025 - GitHub and Quarto/Drafting A-G Quarto Template/CFA_Model_Clean.png){width="70%" fig-align="center"}
+
+
+#### Useful Tools for Structural Equation Modeling
+
+The [`semTools`](https://cran.r-project.org/web/packages/semTools/index.html "more information") package is like a toolkit with special features that makes complex statistical analysis more manageable. It works alongside `lavaan` to provide additional capabilities, such as better ways to handle missing data and easier methods to compare different groups of employees (e.g., younger vs. older workers). It's essentially a set of advanced tools that helps simplifiy complicated statistical procedures.
+
+Used it:
+
+-   To run CFA across multiple imputed datasets (`cfa.mi()`)
+    ```{r eval=FALSE}
+        # once imputed, run CFA on imputed datasets
+          cfa_fitAa_imputed <- cfa.mi(
+            model = cfa_modelAa,
+            data = imp,
+            estimator = "MLR", # robust ML estimator
+            std.lv = T         # standardize latent variables
+          )  
+    ```
+-   To calculate reliability measures from SEM models (`compRelSEM()` and `reliability()`)
+    ```{r eval=FALSE}
+        rel<- compRelSEM(cfa_fitA)
+        rel  
+        
+        reliability_mi <- reliability(cfa_fitAa_imputed)
+        print(reliability_mi)
+    ```
+-   To handle SEM across multiple imputed datasets (`sem.mi()` and `lavaan.mi()`). Note: `sem.mi()` is a high-level wrapper for SEM on MI data and is good when you want plug-and-play SEM with imputed data and/or need pooled fit indices, standardized solutions, etc. `lavaan.mi()` more lower-level engine deep under the hood and is what `sem.mi()` eventually calls. It's good when you want more flexibility for fine-tune model fitting, to control pooling logic, debug or extend model evaluation, or just like to play close to the metal (serious R nerd vibes)
+    ```{r eval=FALSE}
+        # run SEM with imputation
+            sem_fit_all <- sem.mi(
+              model = sem_model,
+              data = imp_new,
+              estimator = "WLSMV",
+              ordered = "DLEAVING_binary"
+            ) 
+    
+        # run SEM on imputed datasets
+        sem_fit_all <- lavaan.mi(
+          model = sem_model,
+          data = imp_updated,
+          estimator = "WLSMV",
+          ordered = c("DLEAVING_binary"),  # Specify as ordered
+          fun = "sem"  # Use sem function
+        )
+    ```
+
+#### Multivariate Imputation by Chained Equations
+
+The [mice](https://cran.r-project.org/web/packages/mice/index.html "more information") package is a tool that helps deal with incomplete survey data (i.e., missingness). When people skip questions on the FEVS survey, this package creates several reasonable guesses for what they might have answered based on their other responses and patterns in the data. Instead of throwing away incomplete surveys, it helps us use all available information to make smart estimates about the missing answers.
+
+Used it:
+
+-   To create imputed datasets with the `mice()` function
+    ```{r eval=FALSE}
+        # Set settings for large dataset with minimal missingness
+          imp <- mice(
+            imputation_data,  # previously prepared dataset
+            m = 5,            # 5 imputations is sufficient given low missingness
+            method = "pmm",   # predictive mean matching works well with Likert data
+            maxit = 5,        # fewer iterations needed due to low missingness
+            printFlag = TRUE
+          )  
+    ```
+-   To examine patterns of missing data (`md.pattern()`)
+    ```{r eval=FALSE}
+        # examine missingness before imputation
+          missing_pattern <- md.pattern(imputation_data, plot = F)
+          print(missing_pattern)  
+    ```
+-   To complete imputed datasets (`complete()`)
+    ```{r eval=FALSE}
+        # add new variables to imputed datasets
+          completed_datasets <- complete(imp, action = "all")
+          for (i in 1:length(completed_datasets)) {
+            # add row identifiers to match with original data
+            row_ids <- match(rownames(completed_datasets[[i]]), rownames(FEVS_2023_POS_ES_DEMOS_ONLY))
+            
+            # add the binary DLEAVING variable
+            completed_datasets[[i]]$DLEAVING_binary <- FEVS_2023_POS_ES_DEMOS_ONLY$DLEAVING_binary[row_ids]
+            
+            # add the age group variable
+            completed_datasets[[i]]$under_40 <- FEVS_2023_POS_ES_DEMOS_ONLY$under_40[row_ids]
+          }  
+    ```
+-   To convert data structures between formats (`as.mids()`). Note: mids is an acronym for multiple imputation data set which is the special object class used by mice to store and work with MI data.
+    ```{r eval=FALSE}
+         # convert back to mids format
+          imp_updated <- as.mids(imp_complete_data) 
+    ```
+#### Feed-Forward Neural Networks and Multinomial Log-Linear Models
+
+The [`nnet`](https://cran.r-project.org/web/packages/nnet/index.html "more information") package is a tool that helps analyze situations where people can make more than two choices. In this FEVS analysis, I used it to understand the different reasons why employees might leave their jobs (staying, leaving for another federal job, leaving for a non-federal job, or leaving for other reasons) rather than just looking at whether they stay or leave.
+
+Used it:
+
+-   To fit multinomial logistic regression models with the `multinom()` function across MI datasets, treating "staying" as the reference category. This allowed for estimation of distinct odds rations for each turnover intention pathway, revealing how POS and ES influence not just _whether_, but _how_ employees plan to leave.
+    ```{r eval=FALSE}
+          # store results
+            multinom_results <- list()
+            
+            for (i in 1:length(factor_datasets)) {
+              # Run multinomial model (Staying is reference level)
+                multinom_fit <- try(multinom(
+                  DLEAVING_cat ~ POS + ES, 
+                  data = factor_datasets[[i]], 
+                  trace = FALSE
+                ))
+                
+                if (!inherits(multinom_fit, "try-error")) {
+                  multinom_results[[i]] <- multinom_fit
+                  cat("Multinomial model", i, "fit successfully\n")
+                } else {
+                  cat("Error in multinomial model", i, "\n")
+                }
+              }
+            
+            # print summary for first model
+              summary(multinom_results[[1]])
+            
+            # odds ratios for easier interpretation
+              exp(coef(multinom_results[[1]])) 
+    ```
+
+## Key Findings — Summary of Hypotheses 
+
+**Employees who feel more supported by their organization report significantly higher satisfaction.**
+This relationship was especially strong among employees under 40 — suggesting support is a major driver of satisfaction in younger federal employees.
+
+**Higher employee satisfaction is strongly linked to a lower intention to leave.**
+The more satisfied employees are, the less likely they are to consider leaving — simple and powerful.
+
+**Employee satisfaction helps explain _how_ support reduces turnover intentions.**
+Perceived organizational support indirectly lowers the desire to leave by boosting satisfaction. In other words, support leads to satisfaction, which then leads to more desire to stay. Interestingly, after accounting for satisfaction, there’s a small positive direct link between support and intention to leave—possibly because well-supported employees feel more confident, or marketable, pursuing better opportunities. Still, the overall effect of support is clearly retention-positive.
+![SEM path diagram for this relationship](C:/Users/LyndseyTuft/A-G Associates/Data Analytics Resources - R/Data Science Best Practices/April 2025 - GitHub and Quarto/Drafting A-G Quarto Template/FEVS SEM Path.png){width="70%" fig-align="center"}
+
+- POS → ES has a strong positive effect (β = 0.97)
+
+- ES → TI has a strong negative effect (β = -0.83), reducing turnover intention
+
+- The direct POS → TI path (dashed line) is small and positive (β = 0.27), suggesting partial mediation
+
+
+**The support-to-satisfaction connection is stronger among employees under 40 than those over 40.**
+While both age groups showed strong links, it was significantly stronger for employees **under 40** (β = 0.981) compared to those **40 and over** (β = 0.953), with a significant difference (_p_ < .001), reinforcing the importance of perceived support in retaining early-career federal staff.
+
+#### Expanded Insight: _Why_ People Leave Matters
+
+A deeper look at the type of turnover intention—staying, switching agencies, leaving government entirely, or leaving for other reasons—added some nuance:
+
+- **Employee satisfaction most strongly protects against leaving for jobs outside the federal government.** Employees with higher satisfaction were significantly less likely to consider leaving for a non-federal job (odds ratio = 0.13), with slightly weaker effects on internal moves (OR = 0.20) and other reasons for leaving (OR = 0.31).
+
+- **Surprisingly, employees who perceive more organizational support were more likely to consider leaving—especially for external jobs.** When controlling for satisfaction, higher organizational support was associated with a greater likelihood of considering all types of turnover. This may reflect that well-supported employees are more confident, more visible to recruiters, or feel more empowered to explore better opportunities. This effect was strongest for those considering leaving for a non-federal job (OR = 2.01).
+
+![Visual summary of how perceived organizational support (POS) and employee satisfaction (ES) related to different types of turnover intentions](C:/Users/LyndseyTuft/A-G Associates/Data Analytics Resources - R/Data Science Best Practices/April 2025 - GitHub and Quarto/Drafting A-G Quarto Template/FEVS findings bar chart.png){width="70%" fig-align="center"}
+
+- POS increases the odds of considering all types of turnover (most strongly for leaving the federal government).
+- ES decreases the odds across all types—especially external exits.
+
+This chart quickly communicates the counterintuitive but insightful findings: Support may empower mobility, while satisfaction promotes retention.
+
+## References
+
+Bakker, A. B., Demerouti, E., Taris, T. W., Schaufeli, W. B., & Schreurs, P. J. G. (2003). A multigroup analysis of the job demands-resources model in four home care organizations. *International Journal of Stress Management, 10*(1), 16–38. <https://doi.org/10.1037/1072-5245.10.1.16>
+
+Charoensap-Kelly, P., Sheldon, P., & Antony, M. G. (2023). Social support expectations of managers and employees from Croatia, Thailand, and the United States amid COVID-19: An organizational support theory perspective. *Southern COmmunication Journal, 88*(5), 491–506. <https://doi.org/10.1080/1041794X.2023.2214114>
+
+Demerouti, E., Bakker, A. B., Nachreiner, F., & Schaufeli, W. B. (2001). The job demands-resources model of burnout. *Journal of Applied Psychology, 86*, 499–512. <https://doi.org/10.1037/0021-9010.86.3.499>
+
+Eisenberger, R., Huntington, R., Hutchinson, S., & Sowa, D. (1986). Perceived organizational support. *Journal of Personality and Social Psychology, 71*(3), 500–507. <https://doi.org/10.1037/0021-9010.71.3.500>
+
+Eisenberger, R., Shanock, L. R., & Wen, X. (2020). Perceived organizational support: Why caring about employees counts. *Annual Review of Organizational Psychology and Organizational Behavior, 7,* 101–124. <https://doi.org/10.1146-annurev-orgpsych-012119-044917> 
+
+Heimerl, P., Haid, M., Benedikt, I., & Scholl-Grissemann, U. (2020). Factors influencing job satisfaction in hospital industry. *SAGE Open, 10*(4). <https://doi.org/10.1177/2158244020982998>
+
+Hngoi, C.L., Abdullah, N.-A., Sulaiman, W. S. W., & Nor, N. I. Z. (2023). Relationship between job involvement, perceived organizational support, and organizational commitment with job insecurity: A systematic literature review. *Frontiers in Psychology, 13*(1066734). <https://doi.org/10.3389/fpsyg.2022.1066734>
+
+Hur, H., & Abner, G. (2023). What makes public employees want to leave their job? A meta-analysis of turnover intention predictors among public sector employees. *Public Administration Review,* 1–23. <https://doi.org/10.1111.puar.13601>
+
+Kline, R. (2023). *Principles and practice of structural equation modeling* (5th ed.). The Guildford Press. 
+
+Kurt, T., & Duyar, I. (2023). The influence of perceived organizational support on teachers' job satisfaction: The mediating roles of climate for initiative and climate for psychological safety. *Participatory Educational Research, 10*(2), 156–173. <https://doi.org/10.17275/per.23.34.10.2>
+
+Mobley, W. H. (1977). Intermediate linkages in the relationship between job satisfaction and employee turnover. *Journal of Applied Psychology, 62*(2), 237–240. <https://doi.org/10.1037/0021-9010.62.2.237>
+
+Partnership for Public Service. (n.d.). *Who is quitting and retiring: Important fiscal 2021 trends in the federal government.* <https://ourpublicservice.org/fed-figures/attrition/>
+
+Pattnaik, L., Mishra, S., & Tripathy, S. K. (2023). Perceived organizational support and organizational commitment: Moderation role of person-organizational fit. *Global Business Review, 24*(5), 902–915. <https://doi.org/10.1177/0972150920920776>
+
+Pu, B., Sang, W., Ji, S., Hu, J., & Phau, I. (2024). The effect of customer incivility on employees' turnover intention in hospitality industry: A chain mediating effect of emotional exhaustion and job satisfaction. *International Journal of Hospitality Management, 118*(103665). <https://doi.10.1016/j.jihm.2023.103665>
+
+Price, J. L. (1977). *The study of turnover*. Iowa State Press.
+
+Resh, W., Moldogaziev, T., Fernandez, S., & Leslie, C. A. (2021). Reversing the lens: Assessing the use of Federal Employee Viewpoint Survey in public administration research. *Review of Public Personnel Administration, 4*(1), 132–162. <https://doi.org/10.1177/0734371X19865012>
+
+Somers, M. J. (2018). Strategies for improving measurement models for secondary data in public administration research: Illustrations from the Federal Employee Viewpoint Survey. *Public Administration Review, 78*(2), 228–239. <https://doi.org/10.1111/puar.12805>

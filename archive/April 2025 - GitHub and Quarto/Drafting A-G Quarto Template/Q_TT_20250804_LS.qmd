@@ -1,0 +1,230 @@
+---
+title: "Quarto and Tidy Tuesday: Digging into ED Data"
+subtitle: "Playing with the April 8 Tidy Tuesday data with the goal of showing some of Quarto's capabilities"
+format: 
+ lumo-html: 
+  logo: "logo.png" # Optional. Path to a logo displayed above the title
+  github-repo: ""  # Optional. Adds a github corner at the top right
+  primary-color: "#22418a"
+  self-contained: true
+  bg-image: "background.jpg"  # Optional: link to an image for the header background
+author: A-G Associates Data Science Community of Practice
+date: last-modified
+---
+
+## Install and Load Packages
+
+```{r}
+#| label: Install and Load Packages
+
+# if you do not have pacman installed, uncomment and run the line below before running the rest of this chunk
+## install.packages("pacman")
+
+pacman::p_load(tidyverse, # helpful for many data processing functions
+               tidytuesdayR,
+               kableExtra,
+               knitr)
+
+```
+
+## Pull in Tidy Tuesday Data
+
+```{r}
+
+#| label: Pull in Tidy Tuesday Data
+
+# Option 1: tidytuesdayR R package 
+## install.packages("tidytuesdayR")
+
+# tuesdata <- tidytuesdayR::tt_load('2025-04-08')
+# ## OR
+# tuesdata <- tidytuesdayR::tt_load(2025, week = 14)
+# 
+# care_state <- tuesdata$care_state
+
+# Option 2: Read directly from GitHub
+
+care_state <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-04-08/care_state.csv')
+
+```
+
+## Examine the Data
+
+**Step 1:** Do some generic counts to decide what data to focus on for analysis. I started out looking at the number of data points for each condition and each state. The states all have the same number of data points (22). The Emergency Department had the most data with 12 rows per state with a total of 672 rows of data. I then dug deeper into the measures themselves and found that there was a good amount of information on times spend in the ED by Psych/Mental Health Patients.
+
+```{r}
+
+#| label: Examine the Data - Condition
+
+xplr_by_condition <- care_state |>
+  count(condition) |> 
+  arrange(desc(n))
+
+xplr_by_condition %>%
+  kable(
+    format = "html",  # Use "latex" if you're knitting to PDF
+    caption = "Options for Conditions",
+    col.names = c("Conditions", "Count")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333")
+```
+
+```{r}
+
+#| label: Examine the Data - State
+
+xplr_by_state <- care_state |> 
+  count(state) |> 
+  arrange(desc(n))
+
+xplr_by_state %>%
+  head(4) |> 
+  kable(
+    format = "html",  # Use "latex" if you're knitting to PDF
+    caption = "Counts by State",
+    col.names = c("State", "Count")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333")
+```
+
+```{r}
+
+#| label: Examine the Data - Condition and State
+
+xplr_by_stcond <- care_state |> 
+  group_by(state) |> 
+  count(state, condition) |> 
+  arrange(desc(n))
+
+xplr_by_stcond %>%
+  head(4) |> 
+  kable(
+    format = "html",  # Use "latex" if you're knitting to PDF
+    caption = "Counts by State and Condition",
+    col.names = c("State", "Condition", "Count")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333")
+
+```
+
+```{r}
+
+#| label: Examine the Data - Measure Name
+
+xplr_by_measure <- care_state |> 
+  select(state, condition, measure_name, score) |> 
+  filter(condition == "Emergency Department") |> 
+  count(measure_name)
+
+xplr_by_measure |> 
+  kable(
+    format = "html",  # Use "latex" if you're knitting to PDF
+    caption = "List of all Measures and Their Counts",
+    col.names = c("Measure Names", "Count")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333")
+
+```
+
+**Step 2:** Create a new data set that only uses the variables and observations we need.
+
+```{r}
+
+#| label: Examine the Data - Create Usable Data Set
+
+data <- care_state |> 
+  select(state, measure_name, score) |> 
+  filter(str_detect(measure_name, fixed("Psych", ignore_case = TRUE)),
+         !str_detect(measure_name, fixed("median", ignore_case = TRUE)),
+         !is.na(score)) |> 
+  mutate(level = case_when(str_detect(measure_name, fixed("(high)", ignore_case = TRUE)) ~ "high",
+                           str_detect(measure_name, fixed("(low)", ignore_case = TRUE)) ~ "low",
+                           str_detect(measure_name, fixed("(moderate)", ignore_case = TRUE)) ~ "moderate",
+                           str_detect(measure_name, fixed("(very", ignore_case = TRUE)) ~ "very high",
+                           T ~ "!!!")) |> 
+  mutate(level = factor(level, c("low", "moderate", "high", "very high")),
+         state = factor(state, levels = sort(unique(state)))) |> 
+  arrange(state, level)
+
+data |> 
+  head(6) |> 
+  kable(
+    format = "html",  # Use "latex" if you're knitting to PDF
+    caption = "List of all Measures and Their Counts",
+    col.names = c("State", "Measure Name", "Score", "Level")
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  ) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333")
+
+```
+
+## Visualize the Data
+
+```{r}
+
+#| label: Visualize the Data - Heat Map
+
+ggplot(data, aes(x = level, y = state, fill = score)) +
+  geom_tile(color = "white") +
+  scale_fill_viridis_c() +
+  labs(
+    title = "Heatmap of Scores by State and Level",
+    x = "Level",
+    y = "State"
+  ) +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 6))
+```
+
+```{r}
+# Define color palette
+level_colors <- c(
+  "low" = "#E41A1C",       # red
+  "moderate" = "#377EB8",    # blue
+  "high" = "#4DAF4A",      # green
+  "very high" = "#984EA3"  # purple
+)
+
+# Plot
+ggplot(data, aes(x = state, y = score, color = level, group = level)) +
+  geom_point(size = 2) +
+  geom_line(linewidth = 0.5) +
+  scale_color_manual(values = level_colors, drop = FALSE) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, size = 8),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 9)
+  ) +
+  labs(
+    title = "Scores by State and Level",
+    x = "State",
+    y = "Score",
+    color = "Level"
+  )
+
+```

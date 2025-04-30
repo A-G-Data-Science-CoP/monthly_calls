@@ -1,0 +1,255 @@
+---
+title: "Using Tidyverse to Explore Indiana's Hospital Discharge Data"
+author: "Madison Merzke"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# install pacman - package manager - if you don't have it already
+# while outside tidyverse, this package does make loading (and installing, if necessary) packages easier
+# https://www.rdocumentation.org/packages/pacman/versions/0.5.1
+
+# to install pacman, uncomment (get rid of the #) and run the below line 
+# to uncomment, can use CTRL + SHIFT + C
+# install.packages("pacman")
+
+# then, we can use pacman to get all the other packages running
+
+# p_load from pacman will load all the packages, and if you don't have them it will install
+pacman::p_load(RODBC, # to get data from Microsoft Access database
+                      # https://www.rdocumentation.org/packages/RODBC/versions/1.3-23
+               tidyverse,# includes most of the packages and functions we'll use, https://www.tidyverse.org/
+               sf, 
+               plotly, 
+               maps) 
+# loading tidyverse loads the core tidyverse: ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats
+# other, more specialized tidyverse packages will need to be loaded individually
+
+# ODBC stands for Open Database Connectivity. See: https://www.geeksforgeeks.org/odbc-full-form/
+
+# set up driver info and specify the path to your Access database
+DRIVERINFO <- "Driver={Microsoft Access Driver (*.mdb, *.accdb)};"
+MDBPATH <- "C:/Users/MadisonMerzke/Downloads/DIAGNOSIS-2020/DIAG_IN2020.MDB"  # replace with your path
+# so this is the 2020 diagnosis data from Indiana's hospitals
+
+# establish the connection
+channel <- odbcDriverConnect(paste0(DRIVERINFO, "DBQ=", MDBPATH))
+
+# we will also use the pipe operator, |>, a lot with our tidyverse coding
+# see https://magrittr.tidyverse.org/
+# long story short, this allows us to code in a more organized, easy-to-follow, linear format
+# moving line to line, rather than having tons of nested functions that are unreadable or many temporary variables
+# also see https://r4ds.had.co.nz/pipes.html
+
+# load data into an R dataframe (e.g., from a table named 'your_table')
+df <- sqlQuery(channel, "SELECT * FROM diagnosis", stringsAsFactors = FALSE) |>
+  collect()
+
+# close the connection
+odbcClose(channel)
+
+```
+
+
+```{r}
+# before we get into exploring the data with various tidyverse packages and functions: 
+# you will need some context on ICD-10 codes within the context of discharge data
+# in the diagnosis table, the DIAGNOSIS_1 variable is the primary diagnosis ICD-10 code
+# see https://www.webpt.com/blog/understanding-icd-10-code-structure for more details on the structure of ICD-10 codes
+# most notably, you'll need to know that our codes have the period (.) between the third and fourth character removed
+# so A021 is actually A02.1 (if you google it, you see that it is Salmonella sepsis)
+
+# let's start by looking at which primary diagnoses are most common?
+
+# this diagnosis table is summarized by hospital, principal diagnosis, and primary payer
+# I don't really care about hospital or primary payer at the moment, so I will probably aggregate further
+
+# let's also grab the variable descriptions from their website: 
+# The following variables are common to all datasets:		
+# 		
+# Variable	Type	Description
+# HOSPITAL_ID	Numeric	Hospital ID Number
+# PAYER1	Numeric	Primary Payer
+# PATS	Numeric	Total Patient Discharges
+# PWC	Numeric	Patient Discharges with Charge Information
+# TC	Numeric (Dollar)	Total Charges
+# TD	Numeric	Total Days (Length of Stay)
+# XC	Numeric (Dollar)	Average Charge
+# XD	Numeric	Average Days (Length of Stay)
+# 		
+# The following variable is unique to the MS-DRG dataset:		
+# 		
+# Variable	Type	Description
+# MSDRG	Numeric	MS-DRG (Medicare Severity - Diagnosis Related Group)
+# 		
+# The following variable is unique to the PROCEDURES dataset:		
+# 		
+# Variable	Type	Description
+# PROCEDURE	Character	Principal Procedure
+# 		
+# The following variable is unique to the DIAGNOSIS dataset:		
+# 		
+# Variable	Type	Description
+# DIAGNOSIS	Character	Principal Diagnosis
+# 		
+# The following variables are unique to the APR-DRG dataset:		
+# 		
+# Variable	Type	Description
+# APRDRG	Numeric	APR-DRG (All Patient Refined - Diagnosis Related Group)
+# SEVERITY	Numeric	Severity
+
+# let's also grab the lookup table of diagnoses so we have the actual ICD-10 code meaning
+# scroll down to lookup tables, diagnosis ID 2020
+# at https://www.in.gov/health/oda/hospital-discharge-data/2020-indiana-hospital-discharge-data-files/
+
+codes <- read.csv("C:/Users/MadisonMerzke/Downloads/DIAGNOSIS-ID-2020(Sheet1).csv") |>
+  select(ICD_Diagnosis_Code, Diagnosis_Description) |> # don't need timeframe
+  rename(DIAGNOSIS_1 = ICD_Diagnosis_Code) |>
+  mutate(DIAGNOSIS_1 = trimws(DIAGNOSIS_1)) |> # seem to be some white space in that field affecting the join below
+  bind_rows(data.frame(DIAGNOSIS_1 = "U071",
+                       Diagnosis_Description = "COVID-19")) # COVID is missing from lookup table
+
+# since PATS is the total number of patient discharges in 2020, let's start with that
+diag_pats <- df |>
+  group_by(DIAGNOSIS_1) |> # aggregating to number of patients discharged by principal diagnosis code
+  summarise(Total_Patients = sum(PATS)) |>
+  arrange(-Total_Patients) |> # descending order
+  left_join(codes) |> # add descriptions of codes in
+  # select(Diagnosis_Description, Total_Patients) |>
+  mutate(Diagnosis_Description = case_when(nchar(Diagnosis_Description)<76 ~ Diagnosis_Description,
+                                           T ~ paste0(str_extract(Diagnosis_Description, regex("^.{75}")), "..."))) 
+# let's shorten the diagnosis description to fit better in visualizations
+
+head(diag_pats %>% select(-DIAGNOSIS_1), 
+     10)  
+
+# which packages within tidyverse are most helpful?
+
+# purrr, dplyr, stringr, lubridate, ggplot2, dplyr, tidyr, readr, tibble, forcats, etc.
+
+```
+
+```{r}
+# simple purrr example 
+
+by_payer <- df |>
+  left_join(codes) |>
+  mutate(Payer_Description = case_when(PAYOR1 == 1 ~ "Medicare", # pulled from website as well
+                                       PAYOR1 == 2 ~ "Medicaid",
+                                       PAYOR1 == 3 ~ "Other Government",
+                                       PAYOR1 == 4 ~ "Commercial Insurance",
+                                       PAYOR1 == 5 ~ "Self Pay",
+                                       PAYOR1 == 6 ~ "Other/Unknown"))
+
+payers <- unique(by_payer$Payer_Description)
+
+payer_calc <- function(payer){ # this is a simple example that could be done more efficiently, but relevant for more complex calculations
+  data <- by_payer |> 
+    filter(Payer_Description==payer) 
+  
+  data.frame(Payer = payer,
+             Total_Charges = sum(data$TC, na.rm = T))
+}
+
+charges_by_payer <- map_dfr(payers, payer_calc) %>%
+  arrange(-Total_Charges) %>%
+  mutate(Total_Charges = scales::label_currency()(Total_Charges))
+
+charges_by_payer
+```
+
+```{r}
+# to add new chunks of code, you can use CTRL + ALT + I
+
+preggo <- df %>%
+  left_join(codes) |>
+  filter(str_detect(DIAGNOSIS_1, "^Z3|^O09|^O9[012]|^O[128]")|
+           str_detect(Diagnosis_Description, "natal")) 
+
+# get hospitals
+hosp <- read.csv("C:/Users/MadisonMerzke/Downloads/Hospital-ID-2020(Hospital_ID).csv")
+
+look <- preggo %>%
+  group_by(HOSPITAL_ID, Diagnosis_Description) %>%
+  summarise(Total_Patients = sum(PATS)) %>%
+  arrange(-Total_Patients) %>%
+  filter(str_detect(Diagnosis_Description, "born")) %>%
+  left_join(hosp %>%
+              rename(HOSPITAL_ID = Hospital_ID)) %>%
+  mutate(how_many = str_extract(Diagnosis_Description, 
+                                regex("single|twin|triplet|other multiple", 
+                                      ignore_case = T)),
+         type = str_extract(Diagnosis_Description, 
+                            regex("vaginal|cesarean|outside hospital|unspecified as to place of birth", 
+                                  ignore_case = T)))
+
+look %>%
+  ungroup() %>%
+  count(type, sort = T)
+
+look %>% 
+  ungroup() %>%
+  count(Diagnosis_Description, sort = T)
+```
+
+
+```{r}
+look %>% 
+  group_by(how_many) %>%
+  summarise(Total_Patients = sum(Total_Patients),
+            Pct = scales::percent_format()
+            (sum(Total_Patients)/sum(look$Total_Patients))) %>%
+  arrange(-Total_Patients)
+
+by_city <- look %>% 
+  group_by(Hospital_City) %>%
+  summarise(Total_Patients = sum(Total_Patients),
+            Pct = scales::percent_format()
+            (sum(Total_Patients)/sum(look$Total_Patients))) %>%
+  arrange(-Total_Patients)
+
+map <- read_sf("https://gisdata.in.gov/server/rest/services/Hosted/Indiana_Boundary_USCB_2020/FeatureServer")
+
+# Create a basic map
+ggplot(map) + geom_sf()
+
+us_states <- map_data("state")
+
+
+install.packages("devtools")
+devtools::install_github("hrbrmstr/localgeo")
+library(localgeo)
+
+test <- by_city %>%
+  bind_cols(geocode(state = "IN", city = by_city$Hospital_City))
+
+
+p <- ggplot(data = us_states %>% filter(region=="indiana"),
+            mapping = aes(x = long, y = lat))
+p + geom_polygon(fill = "lightblue") +
+    guides(fill = FALSE) +
+  geom_point(data = test, aes(x = lon, y = lat, size = Total_Patients)) +
+  theme_minimal()
+
+
+```
+
+```{r}
+# Research Question:
+
+# Compared to median annual income, what is the cost burden of births?
+
+birth_cost <- preggo %>%
+  filter(str_detect(Diagnosis_Description, "born")) %>%
+  group_by(Diagnosis_Description, HOSPITAL_ID) %>%
+  summarise(avg_charge = mean(XC),
+            avg_days = mean(XD),
+            charge_pct_income = 100*avg_charge/58235) %>%
+  left_join(hosp %>%
+              rename(HOSPITAL_ID = Hospital_ID))
+
+```
+
