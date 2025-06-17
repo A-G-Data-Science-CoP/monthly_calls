@@ -1,0 +1,25 @@
+﻿2001-2022 National Suicide Data Appendix ,
+Data presented herein is intended to accompany the 2024 National Veteran Suicide Prevention Annual Report.,
+"Suicide rates presented are the number of suicide deaths in each year divided by the estimated population and multiplied by 100,000. Adjusted rates translate the unadjusted rate for the population into a measure of what the rate would be if the compared populations had the same distributions of the demographic factors that are adjusted for (e.g., age, sex). Adjusted rates are calibrated to the demographic distribution of the U.S. adult population in 2000. Veteran suicide data was obtained from the joint VA/DoD Mortality Data Repository (MDR), and counts of suicide among the general U.S. population were obtained from Centers for Disease Control and Prevention (CDC) Wide-ranging ONline Data for Epidemiologic Research (WONDER). Veteran suicide rates were calculated using linearly interpolated estimates of the Veteran Population Projection Model 2020 (VetPop2020) population. The U.S. Department of Health and Human Services, CDC, National Center for Health Statistics, Population Estimates were used to estimate the U.S. adult population. Non-Veteran numbers were estimated by subtracting the Veteran counts from the general U.S. adult population numbers. ",
+"Suicide deaths are identified based on the underlying cause of death recorded on the death certificate, and as returned from the National Death Index. Suicides include all deaths with International Classification of Diseases, Tenth Revision (ICD–10) underlying cause-of-death codes X60–X84, U03, and Y87.0. Method of injury for suicide deaths are identified based on ICD–10 codes: firearm (X72–X74), suffocation (X70), poisoning (X60–X69), and all other (U03, X71, X75–X84, Y87.0).",
+"Age-specific counts may not sum to the total counts because deaths for which age information is unavailable are included in the total counts and rates but are not included in age-specific counts, age-specific rates, or age-adjusted rates. Due to how Non-Veteran counts are estimated, age groups may sum to more than the total.",
+"Counts and rates are suppressed when based on fewer than 10 deaths. Rates based on small numbers of deaths are considered unreliable, and a small change in the number of deaths might result in a large change in the rate. Because suicide rates based on fewer than 20 suicide deaths are considered statistically unreliable, any comparisons of age-adjusted rates with underlying age-specific rates with less than 20 suicide deaths should be interpreted with caution. ",
+"""Recent Veteran VHA User"" is defined as a Veteran with a VHA encounter in the year of their death or the year prior.",
+"""Other Veteran"" is defined as a Veteran without a VHA encounter in the year of their death or the year prior.",
+"People accessing this data agree to use it for health statistical reporting and analysis only, to make no attempt to learn the identity of any person or establishment included in this data, and to not present or publish death counts or death rates based on counts of nine or fewer.",
+"This file was prepared by the Department of Veterans Affairs Office of Suicide Prevention. With questions, please contact: VASPDataRequest@VA.gov.",
+,
+Table of Contents,
+Sheet Name,Sheet Description
+Veteran ,"•  Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022
+•  Veteran Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022"
+Recent Veteran VHA User,"•  Recent Veteran VHA User Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022
+•  Recent Veteran VHA User Deaths by Suicide: Crude Suicide Rates, by Age Group, 2001-2022"
+Other Veteran,"•  Other Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022
+•  Other Veteran Deaths by Suicide: Crude Suicide Rates, by Age Group, 2001-2022"
+Non-Veteran,"•  Non-Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022
+•  Non-Veteran Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022"
+U.S. Adult Population,"•  U.S. Adult Population Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022
+•  U.S. Adult Population Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022"
+,
+,
