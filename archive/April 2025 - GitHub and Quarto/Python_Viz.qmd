@@ -1,0 +1,206 @@
+---
+title: "Python Visualization"
+subtitle: "Just a few cool things Python can do"
+format:
+  lumo-html: 
+    logo: "logo.png"           # Optional. Path to a logo displayed above the title
+    github-repo: "https://github.com/A-G-Data-Science-CoP"  # Optional. Adds a github corner at the top right
+    primary-color: "#22418a"
+    self-contained: true
+    bg-image: "background.jpg"  # Optional: link to an image for the header background
+  html:
+    embed-resources: true
+    execute:
+      echo: true
+      output: true
+author: Chaerim Lee | A-G Associates Data Science Community of Practice
+date: last-modified
+keywords: ["data science", "analytics"]
+---
+
++-------------------------+-------------------------------------------------------------------------------------------------+
+| Sheet Name              | Sheet Description                                                                               |
++:=======================:+:===============================================================================================:+
+| Veteran                 | • Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022                        |
+|                         |                                                                                                 |
+|                         | • Veteran Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022               |
++-------------------------+-------------------------------------------------------------------------------------------------+
+| Recent Veteran VHA User | • Recent Veteran VHA User Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022        |
+|                         |                                                                                                 |
+|                         | • Recent Veteran VHA User Deaths by Suicide: Crude Suicide Rates, by Age Group, 2001-2022       |
++-------------------------+-------------------------------------------------------------------------------------------------+
+| Other Veteran           | • Other Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022                  |
+|                         |                                                                                                 |
+|                         | • Other Veteran Deaths by Suicide: Crude Suicide Rates, by Age Group, 2001-2022                 |
++-------------------------+-------------------------------------------------------------------------------------------------+
+| Non-Veteran             | • Non-Veteran Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022                    |
+|                         |                                                                                                 |
+|                         | • Non-Veteran Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022           |
++-------------------------+-------------------------------------------------------------------------------------------------+
+| U.S. Adult Population   | • U.S. Adult Population Deaths by Suicide: Crude and Adjusted Rates, by Sex, 2001-2022          |
+|                         |                                                                                                 |
+|                         | • U.S. Adult Population Deaths by Suicide: Crude Suicide Rates, by Sex and Age Group, 2001-2022 |
++-------------------------+-------------------------------------------------------------------------------------------------+
+
+**Clone the file from github**
+
+**Insert github \[link\]**
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+file_path = os.path.join('monthly_calls', 'May_2025_data_viz', 'data', 'VA_National_2001-2022_Appendix_508.xlsx')
+
+try:
+  df = pd.read_excel(file_path)
+  # print(df.head())
+except FileNotFoundError:
+  print(f"Could not find the file at: {data_path}")
+
+# print(df.columns)
+
+```
+
+**Explore the excel file**
+
+```{python}
+#check columns in the file
+# print(df.columns)
+
+#read title of all sheets in the excel file
+all_sheets = pd.read_excel(file_path, sheet_name=None)
+
+#print the title of each sheet
+# print(all_sheets.keys())
+
+#access a specific sheet
+df_first = all_sheets['Veteran']
+```
+
+**Read 'Veteran' sheets in the excel file**
+
+```{python}
+df_full = pd.read_excel(file_path, sheet_name ='Veteran', header = None)
+```
+
+**Create tables option 1**
+
+```{python}
+#| echo: false
+#create table by rows
+table1 = df_full.iloc[0:24].reset_index(drop=True)
+table2 = df_full.iloc[26:138]
+
+
+# print(table2.head())
+
+```
+
+Make header
+
+```{python}
+#| echo: false
+df = pd.read_excel(file_path, sheet_name ="Veteran", header = 26)
+
+# print (df.head())
+```
+
+**Create tables option 2**
+
+```{python}
+
+df = pd.read_excel(file_path, sheet_name ="Veteran", header = None)
+
+# ---- Table 1: Top table with headers in row 0 ----
+table1 = df_full.iloc[1:25].copy()      # Adjust the range as needed
+table1.columns = df_full.iloc[1]        # Set row 0 as header
+table1.reset_index(drop=True, inplace=True)
+
+# ---- Table 2: Second table starting at row 26 ----
+table2 = df_full.iloc[27:138].copy()    # Adjust the bottom row as needed
+table2.columns = df_full.iloc[26]       # Set row 26 as header
+table2.reset_index(drop=True, inplace=True)
+
+# Preview both
+# print("Table 1:\n", table1.head())
+# print("\nTable 2:\n", table2.head())
+```
+
+**Veteran Death by Suicde:**
+
+**Crude and Adjusted Rates, by Sex, 2001 - 2022**
+
+```{python}
+#| echo: false
+table1.head(10)
+```
+
+**Crude Suicide Rates, by Sex and Age Group, 2001 - 2022**
+
+```{python}
+#| echo: false
+table2.head(10)
+```
+
+**Create tables option 2**
+
+```{python}
+#creat table by empty rows
+splits = df_full[df_full.isnull().all(axis=1)].index.tolist()
+
+table3 = df_full.iloc[:splits[0]].dropna(how='all')
+table4 = df_full.iloc[splits[0]+1:].dropna(how='all')
+table4.drop(25, inplace = True)
+```
+
+**Viz 1: Trend Comparison: Male vs Female Crude Rates in a single Age Group**
+
+```{python}
+age_group = '18-34'
+subset = table2[table2["Age Group"] == age_group]
+
+plt.plot(subset['Year of Death'], subset['Male Crude Rate per 100,000'], label = 'Male')
+plt.plot(subset['Year of Death'], subset['Female Crude Rate per 100,000'], label = 'Female')
+plt.title(f'Suicide Rates for Age Group {age_group}')
+plt.xlabel('year')
+plt.ylabel('Rate per 100,000')
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+
+**Interactive Viz**
+
+**Scatter Plot with Plotly**
+
+
+```{python}
+import plotly.express as px
+
+fig = px.scatter(table2, 
+                 x = 'Year of Death',
+                 y = 'Suicide Deaths',
+                 color = 'Age Group',
+                 hover_data= ['Population Estimate', 'Crude Rate per 100,000'],
+                 title = "Suicide Deaths vs Year of Death")
+
+fig.show()
+```
+
+
+```{python}
+fig = px.line(table1, x= "Year of Death", y = "Crude Rate per 100,000")
+fig
+```
+
+
+```{python}
+import ipywidgets as widgets
+from IPython.display import display
+
+dropdown = widgets.Dropdown(options=['Male', 'Female'])
+display(dropdown)
+```
