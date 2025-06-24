@@ -1,0 +1,40 @@
+---
+title: "pull_github"
+format: html
+editor: chaerim
+---
+
+## Pulling dataset from GitHub
+
+[A-G Github](https://github.com/A-G-Data-Science-CoP) \| A-G Associates' Data Science Community of Practice Github Repository
+
+```{r}
+library(readr)
+library(readxl)
+
+```
+
+**How to get a raw file path on github**
+
+Click the dataset you want and copy the URL
+
+![](images/clipboard-611611573.png)
+
+**From the url, replace `"/blob/"` to `"/raw/"` then copy and paste as your url**
+
+```{r}
+
+#Get URL from A-G Github Repository | Make sure change 'blob' to 'raw'
+va_table1 <-"https://github.com/A-G-Data-Science-CoP/monthly_calls/raw/main/May_2025_data_viz/data/cleaned_VA_National_2001-2022_Appendix_508_table_1.csv"
+
+va_table2<-"https://github.com/A-G-Data-Science-CoP/monthly_calls/raw/main/May_2025_data_viz/data/cleaned_VA_National_2001-2022_Appendix_508_table_2.csv"
+
+nvdrs <- "https://github.com/A-G-Data-Science-CoP/monthly_calls/raw/main/May_2025_data_viz/data/cleaned_NVDRS_violent_deaths_report_2004-2022.csv"
+
+#read data using the Github URL
+va1_data <- read.csv(va_table1)
+va2_data <- read.csv(va_table2)
+nvdrs_data <-read.csv(nvdrs)
+
+
+```
